@@ -1,26 +1,18 @@
 package com.example.noteyboi;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-
-import java.util.HashMap;
-import java.util.HashSet;
 
 public class NotesActivity extends AppCompatActivity {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
     int noteId = -1;
+    private TextView nameview;
+    private TextView noteview;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -31,6 +23,9 @@ public class NotesActivity extends AppCompatActivity {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
         getIncomingIntentEdit();
+        nameview = findViewById(R.id.NoteName);
+        noteview = findViewById(R.id.Notes);
+
 
         FloatingActionButton fab = findViewById(R.id.fabsave);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -38,8 +33,11 @@ public class NotesActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Saved", Snackbar.LENGTH_LONG)
                         .setAction("??", null).show();
-                Intent intent = new Intent(getApplicationContext(), NotesActivity.class);
-                startActivity(intent);
+                String textname =  nameview.getText().toString();
+                String textnote =  noteview.getText().toString();
+                MainActivity.mNoteNames.set(noteId, textname);
+                MainActivity.mNotes.set(noteId, textnote);
+                MainActivity.adapter.notifyDataSetChanged();
                 Log.d("Debug", "onTextChanged: Click");
             }
         });
@@ -74,45 +72,6 @@ public class NotesActivity extends AppCompatActivity {
             noteId= MainActivity.mNoteNames.size() - 1;
             MainActivity.adapter.notifyDataSetChanged();
         }
-
-
-
-        name.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                MainActivity.mNoteNames.set(noteId, String.valueOf(charSequence));
-                MainActivity.adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-
-
-        desc.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                MainActivity.mNotes.set(noteId, String.valueOf(charSequence));
-                MainActivity.adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
     }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }

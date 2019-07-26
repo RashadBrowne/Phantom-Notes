@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
                          .setAction("??", null).show();
                  Intent intent = new Intent(getApplicationContext(), NotesActivity.class);
                  startActivity(intent);
-                 Log.d("Debug", "onTextChanged: Click");
+                 Log.d("Debug", "onTextChanged: Click");////
              }
          });
      }
@@ -77,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
     private void Loadinfo(){
         mNoteNames.add("Welcome");
         mNotes.add("Hello, this is a notepad app made as a testing platform for certain features.");
-
         initRecyclerView();
     }
 
@@ -87,7 +86,6 @@ public class MainActivity extends AppCompatActivity {
         RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, mNoteNames, mNotes);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
     }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
