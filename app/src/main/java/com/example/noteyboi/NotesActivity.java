@@ -1,10 +1,11 @@
 package com.example.noteyboi;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -17,7 +18,7 @@ public class NotesActivity extends AppCompatActivity {
     int noteId = -1;
     private TextView nameview, noteview;
     private Animation fab_open,fab_close;
-    boolean open = false;
+    boolean showSave = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +53,7 @@ public class NotesActivity extends AppCompatActivity {
                 MainActivity.adapter.notifyDataSetChanged();
                 fab.startAnimation(fab_close);
                 fab.hide();
-                open = false;
+                showSave = false;
             }
         });
     }
@@ -81,10 +82,10 @@ public class NotesActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(!open){
+                if(!showSave){
                     fabsave.startAnimation(fab_open);
                     fabsave.show();
-                    open = true;
+                    showSave = true;
                 }
             }
 
@@ -98,10 +99,10 @@ public class NotesActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(!open){
+                if(!showSave){
                     fabsave.startAnimation(fab_open);
                     fabsave.show();
-                    open = true;
+                    showSave = true;
                 }
             }
 
@@ -110,7 +111,26 @@ public class NotesActivity extends AppCompatActivity {
         });
     }
 
-
+        @Override
+        public void onBackPressed() {
+            if(showSave){
+                new AlertDialog.Builder(this)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle("Do you want to leave without saving changes?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("No",null)
+                        .setCancelable(false)
+                        .show();
+            }
+            else{
+                super.onBackPressed();
+            }
+        }
 }
 ///if(text.equals("")){}
 
