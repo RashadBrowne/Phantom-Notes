@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-////////////////////////////////////////////////////////////////////////////////////////////////////
     static ArrayList<String> mNoteNames = new ArrayList<>();
     static ArrayList<String> mNotes = new ArrayList<>();
     static RecyclerViewAdapter adapter;
@@ -33,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
          ////////////////////////////////////////////////////////////////////////////////////////////
          Loadinfo();
+         //So I can update the recycler view from other activities
          recyclerView = findViewById(R.id.recycler_view);
          adapter = new RecyclerViewAdapter(this, mNoteNames, mNotes);
          recyclerView.setAdapter(adapter);
@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
                          .setAction("??", null).show();
                  Intent intent = new Intent(getApplicationContext(), NotesActivity.class);
                  startActivity(intent);
-                 Log.d("Debug", "onTextChanged: Click");////
              }
          });
      }
@@ -67,6 +66,12 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(getApplicationContext(), NotesActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
+        if (id == R.id.action_settings2) {
             return true;
         }
 
@@ -75,8 +80,8 @@ public class MainActivity extends AppCompatActivity {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
     private void Loadinfo(){
-        mNoteNames.add("Welcome");
-        mNotes.add("Hello, this is a notepad app made as a testing platform for certain features.");
+        mNoteNames.add("Hello");
+        mNotes.add("This is your first note.");
         initRecyclerView();
     }
 
@@ -87,5 +92,4 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
-////////////////////////////////////////////////////////////////////////////////////////////////////
 }

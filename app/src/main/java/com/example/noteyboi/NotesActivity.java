@@ -59,6 +59,7 @@ public class NotesActivity extends AppCompatActivity {
     }
 
     private void getIncomingIntentEdit(){
+        //Receive info from the recycler view
         if (getIntent().hasExtra("note_name") && getIntent().hasExtra("note_desc")) {
             String noteName = getIntent().getStringExtra("note_name");
             String noteDesc = getIntent().getStringExtra("note_desc");
@@ -70,67 +71,55 @@ public class NotesActivity extends AppCompatActivity {
     }
 
     private void setInfoEdit(String Name, String Desc){
+        //As we populate more items its better to make a class to do it
         TextView name = findViewById(R.id.NoteName);
         TextView desc = findViewById(R.id.Notes);
         name.setText(Name);
         desc.setText(Desc);
-        final FloatingActionButton fabsave = findViewById(R.id.fabsave);
-
-        name.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(!showSave){
-                    fabsave.startAnimation(fab_open);
-                    fabsave.show();
-                    showSave = true;
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {}
-        });
-
-        desc.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(!showSave){
-                    fabsave.startAnimation(fab_open);
-                    fabsave.show();
-                    showSave = true;
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {}
-        });
+        name.addTextChangedListener(new GenericTextWatcher());
+        desc.addTextChangedListener(new GenericTextWatcher());
     }
 
+    @Override
+    public void onBackPressed() {
+        //Make sure the user saves changes if they want to
+        if(showSave){
+            new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Do you want to leave without saving changes?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                    }
+                })
+                .setNegativeButton("No",null)
+                .setCancelable(false)
+                .show();
+        }
+        else{
+            super.onBackPressed();
+        }
+    }
+
+    private class GenericTextWatcher implements TextWatcher {
+        //Simplifies the code instead of making two duplicated text watcher
+        //Since a textwatcher can only be defined when called
+        final FloatingActionButton fabsave = findViewById(R.id.fabsave);
+
         @Override
-        public void onBackPressed() {
-            if(showSave){
-                new AlertDialog.Builder(this)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setTitle("Do you want to leave without saving changes?")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                finish();
-                            }
-                        })
-                        .setNegativeButton("No",null)
-                        .setCancelable(false)
-                        .show();
-            }
-            else{
-                super.onBackPressed();
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            if(!showSave){
+                fabsave.startAnimation(fab_open);
+                fabsave.show();
+                showSave = true;
             }
         }
-}
-///if(text.equals("")){}
 
+        @Override
+        public void afterTextChanged(Editable editable) {}
+    }
+}

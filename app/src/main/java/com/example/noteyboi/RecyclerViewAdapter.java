@@ -3,7 +3,6 @@ package com.example.noteyboi;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,24 +26,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         this.mContext = context;
     }
 
-
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.team_layout,parent, false);
+        //Create the view to insert the information into
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_layout,parent, false);
         ViewHolder holder = new ViewHolder(view);
         return holder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        Log.d(TAG, "onBindViewHolder: called.");
-
+        //Populating the layout
         holder.notename.setText(mNoteNames.get(position));
         holder.note.setText(mNotes.get(position));
 
-
-
-
+        //Prompt for unsaved changes
         holder.parentLayout.setOnLongClickListener(new View.OnLongClickListener() {
            @Override
            public boolean onLongClick(View view) {
@@ -66,7 +62,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
            }
        });
 
-
+        //Passing the information into the activity thats made when it's clicked then starting it
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -85,7 +81,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-
+        //Defining the objects in the layout
         TextView notename;
         TextView note;
         ConstraintLayout parentLayout;

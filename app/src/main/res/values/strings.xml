@@ -1,4 +1,5 @@
 <resources>
-    <string name="app_name">NoteyBoi</string>
-    <string name="action_settings">Hi There</string>
+    <string name="app_name">Simple Notes</string>
+    <string name="action_settings">New note</string>
+    <string name="action_settings2">Version 1 - Beta 2</string>
 </resources>
