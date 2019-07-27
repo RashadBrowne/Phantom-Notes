@@ -5,7 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -28,32 +31,25 @@ public class NotesActivity extends AppCompatActivity {
         getIncomingIntentEdit();
         nameview = findViewById(R.id.NoteName);
         noteview = findViewById(R.id.Notes);
+
+        noteview.setLinksClickable(true);
+        noteview.setAutoLinkMask(Linkify.WEB_URLS);
+        //If the edit text contains previous text with potential links
+        //Linkify has options "WEB_URLS, PHONE_NUMBERS, EMAIL_ADDRESSES"
+        Linkify.addLinks(noteview   , Linkify.ALL);
+        noteview.setMovementMethod(LinkMovementMethod.getInstance());
+
         fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
         fab_close = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fab_close);
-
-
         final FloatingActionButton fab = findViewById(R.id.fabsave);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String textname =  nameview.getText().toString();
-                String textnote =  noteview.getText().toString();
-
                 Snackbar.make(view, "Saved", Snackbar.LENGTH_LONG)
                         .setAction("??", null).show();
-
-                if (noteId <= -1) {
-                    MainActivity.mNoteNames.add("");
-                    MainActivity.mNotes.add("");
-                    noteId= MainActivity.mNoteNames.size() - 1;
-                }
-
-                MainActivity.mNoteNames.set(noteId, textname);
-                MainActivity.mNotes.set(noteId, textnote);
-                MainActivity.adapter.notifyDataSetChanged();
+                SaveNote();
                 fab.startAnimation(fab_close);
                 fab.hide();
-                showSave = false;
             }
         });
     }
@@ -85,15 +81,21 @@ public class NotesActivity extends AppCompatActivity {
         //Make sure the user saves changes if they want to
         if(showSave){
             new AlertDialog.Builder(this)
-                .setIcon(android.R.drawable.ic_dialog_alert)
                 .setTitle("Do you want to leave without saving changes?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        SaveNote();
+                        finish();
+                    }
+                })
+                .setNeutralButton("Discard", new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         finish();
                     }
                 })
-                .setNegativeButton("No",null)
+                .setNegativeButton("Cancel", null)
                 .setCancelable(false)
                 .show();
         }
@@ -120,6 +122,22 @@ public class NotesActivity extends AppCompatActivity {
         }
 
         @Override
-        public void afterTextChanged(Editable editable) {}
+        public void afterTextChanged(Editable editable) {
+            Linkify.addLinks(editable, Linkify.ALL);}
+    }
+
+    public void SaveNote(){
+        String textname =  nameview.getText().toString();
+        String textnote =  noteview.getText().toString();
+        if (noteId <= -1) {
+            MainActivity.mNoteNames.add("");
+            MainActivity.mNotes.add("");
+            noteId= MainActivity.mNoteNames.size() - 1;
+        }
+
+        MainActivity.mNoteNames.set(noteId, textname);
+        MainActivity.mNotes.set(noteId, textnote);
+        MainActivity.adapter.notifyDataSetChanged();
+        showSave = false;
     }
 }
