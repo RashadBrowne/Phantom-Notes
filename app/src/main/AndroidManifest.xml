@@ -4,13 +4,12 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/simple_notes"
         android:label="@string/app_name"
+        android:icon="@mipmap/simple_notes"
         android:roundIcon="@mipmap/simple_notes_round"
         android:supportsRtl="true"
         android:resizeableActivity="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".NotesActivity" android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -21,6 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".NotesActivity"></activity>
     </application>
 
 </manifest>

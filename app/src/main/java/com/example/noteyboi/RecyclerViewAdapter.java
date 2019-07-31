@@ -3,6 +3,7 @@ package com.example.noteyboi;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,14 +16,17 @@ import java.util.ArrayList;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
-    private static final String TAG = "RecyclerViewAdapter";
+    private static final String TAG = "DatabaseHelper";
     private ArrayList<String> mNoteNames = new ArrayList<>();
     private ArrayList<String> mNotes = new ArrayList<>();
+    private ArrayList<Integer> mPosition = new ArrayList<>();
     private Context mContext;
+    DatabaseHelper mDatabaseHelper;
 
-    public RecyclerViewAdapter(Context context, ArrayList<String> notenames, ArrayList<String> notes) {
+    public RecyclerViewAdapter(Context context, ArrayList<String> notenames, ArrayList<String> notes, ArrayList<Integer> positions) {
         this.mNoteNames = notenames;
         this.mNotes = notes;
+        this.mPosition = positions;
         this.mContext = context;
     }
 
@@ -39,7 +43,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         //Populating the layout
         holder.notename.setText(mNoteNames.get(position));
         holder.note.setText(mNotes.get(position));
-
+        //holder.position.setText(mNotes.get(position));
+        final int dbPosition = mPosition.get(position);
+        final int last = mPosition.get(mPosition.size() - 1);
         //Prompt for unsaved changes
         holder.parentLayout.setOnLongClickListener(new View.OnLongClickListener() {
            @Override
@@ -50,9 +56,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                @Override
                public void onClick(DialogInterface dialogInterface, int i) {
+                   mDatabaseHelper = new DatabaseHelper(mContext);
                    MainActivity.mNoteNames.remove(position);
                    MainActivity.mNotes.remove(position);
+                   MainActivity.mPosition.remove(position);
                    MainActivity.adapter.notifyDataSetChanged();
+                   mDatabaseHelper.Delete(dbPosition);
                }
            })
                     .setNegativeButton("No", null)
@@ -69,6 +78,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 intent.putExtra("note_name", mNoteNames.get(position));
                 intent.putExtra("note_desc", mNotes.get(position));
                 intent.putExtra("position", position);
+                intent.putExtra("trueposition", dbPosition);
+                intent.putExtra("last", last);
                 mContext.startActivity(intent);
             }
         });

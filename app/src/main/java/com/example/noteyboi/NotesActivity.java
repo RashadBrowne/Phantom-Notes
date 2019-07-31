@@ -2,26 +2,39 @@ package com.example.noteyboi;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.util.ArrayList;
 
 
 public class NotesActivity extends AppCompatActivity {
     int noteId = -1;
+    int lastid = 0;
+    int trueposition = 0;
     private TextView nameview, noteview;
     private Animation fab_open,fab_close;
     boolean showSave = false;
+    CoordinatorLayout coordinatorLayout;
+    DatabaseHelper mDatabaseHelper;
+    static ArrayList<Integer> lastpos = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +42,7 @@ public class NotesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_notes);
 
         getIncomingIntentEdit();
+        mDatabaseHelper = new DatabaseHelper(this);
         nameview = findViewById(R.id.NoteName);
         noteview = findViewById(R.id.Notes);
 
@@ -45,8 +59,6 @@ public class NotesActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Saved", Snackbar.LENGTH_LONG)
-                        .setAction("??", null).show();
                 SaveNote();
                 fab.startAnimation(fab_close);
                 fab.hide();
@@ -60,6 +72,9 @@ public class NotesActivity extends AppCompatActivity {
             String noteName = getIntent().getStringExtra("note_name");
             String noteDesc = getIntent().getStringExtra("note_desc");
             noteId = getIntent().getIntExtra("position", -1);
+            trueposition = getIntent().getIntExtra("trueposition", 0);
+            lastid = getIntent().getIntExtra("last", 0);
+
             setInfoEdit(noteName, noteDesc);
         } else {
             setInfoEdit("", "");
@@ -129,15 +144,50 @@ public class NotesActivity extends AppCompatActivity {
     public void SaveNote(){
         String textname =  nameview.getText().toString();
         String textnote =  noteview.getText().toString();
-        if (noteId <= -1) {
-            MainActivity.mNoteNames.add("");
-            MainActivity.mNotes.add("");
-            noteId= MainActivity.mNoteNames.size() - 1;
-        }
+        lastid += 1;
+        coordinatorLayout = findViewById(R.id.mainnotelayout);
 
-        MainActivity.mNoteNames.set(noteId, textname);
-        MainActivity.mNotes.set(noteId, textnote);
-        MainActivity.adapter.notifyDataSetChanged();
-        showSave = false;
+        if (textname.equals("") && textnote.equals("")){
+            Snackbar.make(coordinatorLayout, "Nothing to save", Snackbar.LENGTH_LONG)
+                    .setAction("??", null).show();
+        } else {
+            if (noteId <= -1) {
+                MainActivity.mNoteNames.add("");
+                MainActivity.mNotes.add("");
+                noteId = MainActivity.mNoteNames.size() - 1;
+                AddData(textname,textnote);
+
+                Cursor data = mDatabaseHelper.getData();
+                while(data.moveToNext()) {
+                    lastpos.add(data.getInt(0));
+                }
+                trueposition = lastid = lastpos.get(lastpos.size() - 1);
+                MainActivity.mPosition.add(lastid);
+            } else {
+                mDatabaseHelper.UpdateRow(textname,textnote, trueposition);
+            }
+
+            MainActivity.mNoteNames.set(noteId, textname);
+            MainActivity.mNotes.set(noteId, textnote);
+            MainActivity.adapter.notifyDataSetChanged();
+            showSave = false;
+            Snackbar.make(coordinatorLayout, "Saved", Snackbar.LENGTH_LONG)
+                    .setAction("??", null).show();
+        }
+    }
+
+    //for sqlite
+    private void AddData(String Name, String Note){
+        boolean insertData = mDatabaseHelper.addData(Name,Note);
+
+        if (insertData){
+            toastMessage("Saved Successfully");
+        } else{
+            toastMessage("Something went wrong while saving");
+        }
+    }
+
+    private void toastMessage(String message){
+        Toast.makeText(this,message, Toast.LENGTH_SHORT).show();
     }
 }

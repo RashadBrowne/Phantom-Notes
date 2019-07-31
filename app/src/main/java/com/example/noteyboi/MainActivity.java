@@ -1,6 +1,7 @@
 package com.example.noteyboi;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -13,13 +14,17 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     static ArrayList<String> mNoteNames = new ArrayList<>();
     static ArrayList<String> mNotes = new ArrayList<>();
+    static ArrayList<Integer> mPosition = new ArrayList<>();
     static RecyclerViewAdapter adapter;
     static RecyclerView recyclerView;
+    DatabaseHelper mDatabaseHelper;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -31,10 +36,11 @@ public class MainActivity extends AppCompatActivity {
          setSupportActionBar(toolbar);
 
          ////////////////////////////////////////////////////////////////////////////////////////////
+         mDatabaseHelper = new DatabaseHelper(this);
          Loadinfo();
          //So I can update the recycler view from other activities
          recyclerView = findViewById(R.id.recycler_view);
-         adapter = new RecyclerViewAdapter(this, mNoteNames, mNotes);
+         adapter = new RecyclerViewAdapter(this, mNoteNames, mNotes, mPosition);
          recyclerView.setAdapter(adapter);
          ////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -80,16 +86,38 @@ public class MainActivity extends AppCompatActivity {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
     private void Loadinfo(){
-        mNoteNames.add("Hello");
-        mNotes.add("This is your first note.");
+        Cursor data = mDatabaseHelper.getData();
+        while(data.moveToNext()){
+            mPosition.add(data.getInt(0));//get items from column zero
+            mNoteNames.add(data.getString(1));//get items from column one
+            mNotes.add(data.getString(2));//get items from column two
+        }
         initRecyclerView();
     }
 
     private void initRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, mNoteNames, mNotes);
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, mNoteNames, mNotes, mPosition);
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setReverseLayout(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
+    }
+
+    //For sqlite
+    private void AddData(String Name, String Note){
+         boolean insertData = mDatabaseHelper.addData(Name,Note);
+
+         if (insertData){
+             toastMessage("Saved Successfully");
+         } else{
+             toastMessage("Something went wrong while saving");
+         }
+    }
+
+    private void toastMessage(String message){
+        Toast.makeText(this,message, Toast.LENGTH_SHORT).show();
     }
 }
