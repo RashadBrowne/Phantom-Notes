@@ -3,4 +3,5 @@
     <color name="colorPrimary">#04f</color>
     <color name="colorPrimaryDark">#02a</color>
     <color name="colorAccent">#f40</color>
+    <color name="notesBackground">#faf7f7</color>
 </resources>

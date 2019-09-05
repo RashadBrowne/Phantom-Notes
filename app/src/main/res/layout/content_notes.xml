@@ -8,8 +8,9 @@
 
     <ScrollView
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:padding="20dp"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,17 +19,21 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="600dp">
 
             <EditText
                 android:id="@+id/NoteName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/edittext"
                 android:ems="10"
+                android:gravity="start|top"
                 android:hint="Name"
-                android:inputType="textPersonName"
-                android:textSize="25sp"
-                android:textStyle="bold"
+                android:inputType="textMultiLine"
+                android:paddingHorizontal="10dp"
+                android:scrollbarSize="0dp"
+                android:scrollbars="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -37,17 +42,22 @@
                 android:id="@+id/Notes"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/edittext"
                 android:ems="10"
                 android:gravity="start|top"
+                android:hint="Note"
                 android:inputType="textMultiLine"
                 android:paddingHorizontal="10dp"
+                android:paddingBottom="50dp"
                 android:scrollbarSize="0dp"
-                android:scrollbars="none"
+                android:scrollbars="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.49"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/NoteName" />
+                app:layout_constraintTop_toBottomOf="@id/NoteName" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

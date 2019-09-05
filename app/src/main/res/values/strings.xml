@@ -1,5 +1,7 @@
 <resources>
-    <string name="app_name">Simple Notes</string>
+    <string name="app_name">Simple Notes Lite</string>
     <string name="action_settings">New note</string>
     <string name="action_settings2">Version 1 - Beta 2</string>
+    <string name="shortcut_short_label">Create note</string>
+    <string name="shortcut_long_label">Create new note</string>
 </resources>

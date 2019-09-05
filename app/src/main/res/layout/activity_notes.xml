@@ -2,12 +2,16 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainnotelayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/mainnotelayout"
+    android:background="@color/notesBackground"
     tools:context=".MainActivity">
 
-    <include layout="@layout/content_notes" />
+    <include
+        layout="@layout/content_notes"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabsave"

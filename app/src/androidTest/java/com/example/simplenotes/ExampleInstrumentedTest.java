@@ -1,4 +1,4 @@
-package com.example.noteyboi;
+package com.example.simplenotes;
 
 import android.content.Context;
 

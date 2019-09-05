@@ -1,4 +1,4 @@
-package com.example.noteyboi;
+package com.example.simplenotes;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -10,11 +10,10 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.util.Log;
+
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -33,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
          super.onCreate(savedInstanceState);
          setContentView(R.layout.activity_main);
          Toolbar toolbar = findViewById(R.id.toolbar);
-         setSupportActionBar(toolbar);
+         //setSupportActionBar(toolbar);
 
          ////////////////////////////////////////////////////////////////////////////////////////////
          mDatabaseHelper = new DatabaseHelper(this);
@@ -104,20 +103,5 @@ public class MainActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setReverseLayout(true);
         recyclerView.setLayoutManager(linearLayoutManager);
-    }
-
-    //For sqlite
-    private void AddData(String Name, String Note){
-         boolean insertData = mDatabaseHelper.addData(Name,Note);
-
-         if (insertData){
-             toastMessage("Saved Successfully");
-         } else{
-             toastMessage("Something went wrong while saving");
-         }
-    }
-
-    private void toastMessage(String message){
-        Toast.makeText(this,message, Toast.LENGTH_SHORT).show();
     }
 }
