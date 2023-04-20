@@ -8,11 +8,9 @@ import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.Html;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -26,6 +24,8 @@ import java.util.ArrayList;
 
 
 public class NotesActivity extends AppCompatActivity {
+    //TODO: Clean up this database code, it should be entirely in databasehelper
+    //TODO: Test for and fix the reloading glitch
     int noteId = -1;
     int lastid = 0;
     int trueposition = 0;
@@ -33,7 +33,7 @@ public class NotesActivity extends AppCompatActivity {
     private Animation fab_open,fab_close;
     boolean showSave = false;
     CoordinatorLayout coordinatorLayout;
-    DatabaseHelper mDatabaseHelper;
+    OldDatabaseHelper mDatabaseHelper;
     static ArrayList<Integer> lastpos = new ArrayList<>();
 
     @Override
@@ -42,7 +42,7 @@ public class NotesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_notes);
 
         getIncomingIntentEdit();
-        mDatabaseHelper = new DatabaseHelper(this);
+        mDatabaseHelper = new OldDatabaseHelper(this);
         nameview = findViewById(R.id.NoteName);
         noteview = findViewById(R.id.Notes);
 
@@ -115,6 +115,7 @@ public class NotesActivity extends AppCompatActivity {
                 .show();
         }
         else{
+//            MainActivity.refreshRecyclerView();
             super.onBackPressed();
         }
     }
@@ -155,6 +156,8 @@ public class NotesActivity extends AppCompatActivity {
                 MainActivity.mNoteNames.add("");
                 MainActivity.mNotes.add("");
                 noteId = MainActivity.mNoteNames.size() - 1;
+
+                //TODO: Make this a try catch using the main function
                 AddData(textname,textnote);
 
                 Cursor data = mDatabaseHelper.getData();
@@ -169,7 +172,7 @@ public class NotesActivity extends AppCompatActivity {
 
             MainActivity.mNoteNames.set(noteId, textname);
             MainActivity.mNotes.set(noteId, textnote);
-            MainActivity.adapter.notifyDataSetChanged();
+//            MainActivity.adapter.notifyDataSetChanged();
             showSave = false;
             Snackbar.make(coordinatorLayout, "Saved", Snackbar.LENGTH_LONG)
                     .setAction("??", null).show();

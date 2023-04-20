@@ -1,9 +1,9 @@
 package com.example.noteyboi;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,15 +16,14 @@ import java.util.ArrayList;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
-    private static final String TAG = "DatabaseHelper";
     private ArrayList<String> mNoteNames = new ArrayList<>();
     private ArrayList<String> mNotes = new ArrayList<>();
     private ArrayList<Integer> mPosition = new ArrayList<>();
     private Context mContext;
-    DatabaseHelper mDatabaseHelper;
+    OldDatabaseHelper mDatabaseHelper;
 
-    public RecyclerViewAdapter(Context context, ArrayList<String> notenames, ArrayList<String> notes, ArrayList<Integer> positions) {
-        this.mNoteNames = notenames;
+    public RecyclerViewAdapter(Context context, ArrayList<String> noteNames, ArrayList<String> notes, ArrayList<Integer> positions) {
+        this.mNoteNames = noteNames;
         this.mNotes = notes;
         this.mPosition = positions;
         this.mContext = context;
@@ -34,14 +33,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         //Create the view to insert the information into
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_layout,parent, false);
-        ViewHolder holder = new ViewHolder(view);
-        return holder;
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
         //Populating the layout
-        holder.notename.setText(mNoteNames.get(position));
+        holder.noteName.setText(mNoteNames.get(position));
         holder.note.setText(mNotes.get(position));
         //holder.position.setText(mNotes.get(position));
         final int dbPosition = mPosition.get(position);
@@ -56,7 +54,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                @Override
                public void onClick(DialogInterface dialogInterface, int i) {
-                   mDatabaseHelper = new DatabaseHelper(mContext);
+                   mDatabaseHelper = new OldDatabaseHelper(mContext);
                    MainActivity.mNoteNames.remove(position);
                    MainActivity.mNotes.remove(position);
                    MainActivity.mPosition.remove(position);
@@ -92,12 +90,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         //Defining the objects in the layout
-        TextView notename;
+        TextView noteName;
         TextView note;
         ConstraintLayout parentLayout;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            notename = itemView.findViewById(R.id.name);
+            noteName = itemView.findViewById(R.id.name);
             note = itemView.findViewById(R.id.desc);
             parentLayout = itemView.findViewById(R.id.parent_layout);
         }

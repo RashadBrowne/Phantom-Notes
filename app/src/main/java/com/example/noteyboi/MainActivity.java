@@ -10,7 +10,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.util.Log;
+
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,10 +24,12 @@ public class MainActivity extends AppCompatActivity {
     static ArrayList<Integer> mPosition = new ArrayList<>();
     static RecyclerViewAdapter adapter;
     static RecyclerView recyclerView;
-    DatabaseHelper mDatabaseHelper;
+    OldDatabaseHelper mDatabaseHelper;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+
+    //TODO: Name things properly
      @Override
     protected void onCreate(Bundle savedInstanceState) {
          super.onCreate(savedInstanceState);
@@ -36,9 +38,10 @@ public class MainActivity extends AppCompatActivity {
          setSupportActionBar(toolbar);
 
          ////////////////////////////////////////////////////////////////////////////////////////////
-         mDatabaseHelper = new DatabaseHelper(this);
+         mDatabaseHelper = new OldDatabaseHelper(this);
          Loadinfo();
          //So I can update the recycler view from other activities
+         //TODO: Make sure this code isn't redundant
          recyclerView = findViewById(R.id.recycler_view);
          adapter = new RecyclerViewAdapter(this, mNoteNames, mNotes, mPosition);
          recyclerView.setAdapter(adapter);
@@ -56,6 +59,12 @@ public class MainActivity extends AppCompatActivity {
          });
      }
 
+     public void refreshRecyclerView(){
+         Loadinfo();
+     }
+
+
+     //TODO: Add to the options menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -87,6 +96,9 @@ public class MainActivity extends AppCompatActivity {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
     private void Loadinfo(){
         Cursor data = mDatabaseHelper.getData();
+        //Would've been better to load objects so I could sort the objects by field
+        // Also should have included a modified date into the Database schema
+        // TODO: Change to loading objects
         while(data.moveToNext()){
             mPosition.add(data.getInt(0));//get items from column zero
             mNoteNames.add(data.getString(1));//get items from column one
@@ -102,10 +114,12 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setReverseLayout(true);
+//        linearLayoutManager.setReverseLayout(true);
         recyclerView.setLayoutManager(linearLayoutManager);
     }
 
+
+    //TODO: Remove this
     //For sqlite
     private void AddData(String Name, String Note){
          boolean insertData = mDatabaseHelper.addData(Name,Note);
