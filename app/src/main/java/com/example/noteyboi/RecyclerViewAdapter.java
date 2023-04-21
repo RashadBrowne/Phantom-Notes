@@ -1,5 +1,7 @@
 package com.example.noteyboi;
 
+import static com.example.noteyboi.MainActivity.recyclerView;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -41,7 +43,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         //Populating the layout
         holder.noteName.setText(mNoteNames.get(position));
         holder.note.setText(mNotes.get(position));
-        //holder.position.setText(mNotes.get(position));
         final int dbPosition = mPosition.get(position);
         final int last = mPosition.get(mPosition.size() - 1);
         //Prompt for unsaved changes
@@ -58,7 +59,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                    MainActivity.mNoteNames.remove(position);
                    MainActivity.mNotes.remove(position);
                    MainActivity.mPosition.remove(position);
-                   MainActivity.adapter.notifyDataSetChanged();
+//                   MainActivity.adapter.notifyDataSetChanged(); Crashing the app
+//                   MainActivity.adapter.notifyItemRemoved(position);
                    mDatabaseHelper.Delete(dbPosition);
                }
            })

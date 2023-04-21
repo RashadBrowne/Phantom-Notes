@@ -11,10 +11,10 @@ android {
     compileSdkVersion 33
     defaultConfig {
         applicationId "com.example.noteyboi"
-        minSdkVersion 21
+        minSdkVersion 24
         targetSdkVersion 29
         versionCode 1
-        versionName "20-4/23 Build 2"
+        versionName "21-4/23 Build 1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

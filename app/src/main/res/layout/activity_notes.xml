@@ -4,19 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/mainnotelayout"
+    android:id="@+id/mainNoteLayout"
     tools:context=".MainActivity">
 
-    <include layout="@layout/content_notes" />
+    <include
+        layout="@layout/content_notes"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabsave"
+        android:id="@+id/FABSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:tint="#fff"
         android:visibility="invisible"
-        app:srcCompat="@android:drawable/ic_menu_save" />
+        app:srcCompat="@android:drawable/ic_menu_save"
+        android:contentDescription="@string/Access_Hint_Save" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

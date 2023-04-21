@@ -25,10 +25,11 @@ public class MainActivity extends AppCompatActivity {
     static RecyclerViewAdapter adapter;
     static RecyclerView recyclerView;
     OldDatabaseHelper mDatabaseHelper;
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
+////Activity Lifecycle Modifiers////////////////////////////////////////////////////////////////////
     //TODO: Name things properly
      @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
          ////////////////////////////////////////////////////////////////////////////////////////////
          mDatabaseHelper = new OldDatabaseHelper(this);
-         Loadinfo();
-         //So I can update the recycler view from other activities
-         //TODO: Make sure this code isn't redundant
-         recyclerView = findViewById(R.id.recycler_view);
-         adapter = new RecyclerViewAdapter(this, mNoteNames, mNotes, mPosition);
-         recyclerView.setAdapter(adapter);
+         loadRecyclerViewData();
          ////////////////////////////////////////////////////////////////////////////////////////////
 
          FloatingActionButton fab = findViewById(R.id.fab);
@@ -59,11 +55,15 @@ public class MainActivity extends AppCompatActivity {
          });
      }
 
-     public void refreshRecyclerView(){
-         Loadinfo();
+     @Override
+     protected void onResume(){
+         super.onResume();
+         refreshRecyclerView();
      }
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////Option Menu Code////////////////////////////////////////////////////////////////////////////////
      //TODO: Add to the options menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -93,8 +93,19 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-    private void Loadinfo(){
+////Recycler View Code//////////////////////////////////////////////////////////////////////////////
+
+    public void refreshRecyclerView(){
+        mPosition.removeAll(mPosition);
+        mNoteNames.removeAll(mNoteNames);
+        mNotes.removeAll(mNotes);
+
+        loadRecyclerViewData();
+    }
+
+    public void loadRecyclerViewData(){
         Cursor data = mDatabaseHelper.getData();
         //Would've been better to load objects so I could sort the objects by field
         // Also should have included a modified date into the Database schema
@@ -107,8 +118,9 @@ public class MainActivity extends AppCompatActivity {
         initRecyclerView();
     }
 
-    private void initRecyclerView() {
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+    public void initRecyclerView() {
+        //RecyclerView
+        recyclerView = findViewById(R.id.recycler_view);
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
         RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, mNoteNames, mNotes, mPosition);
         recyclerView.setAdapter(adapter);
@@ -118,20 +130,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
     }
 
-
-    //TODO: Remove this
-    //For sqlite
-    private void AddData(String Name, String Note){
-         boolean insertData = mDatabaseHelper.addData(Name,Note);
-
-         if (insertData){
-             toastMessage("Saved Successfully");
-         } else{
-             toastMessage("Something went wrong while saving");
-         }
-    }
-
-    private void toastMessage(String message){
+    private void createToastMessage(String message){
         Toast.makeText(this,message, Toast.LENGTH_SHORT).show();
     }
 }

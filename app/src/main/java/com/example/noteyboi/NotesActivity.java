@@ -36,6 +36,11 @@ public class NotesActivity extends AppCompatActivity {
     OldDatabaseHelper mDatabaseHelper;
     static ArrayList<Integer> lastpos = new ArrayList<>();
 
+
+    //TODO: Work on autocorrect in the settings menu
+    //textAutoCorrect or textNoSuggestions
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +60,7 @@ public class NotesActivity extends AppCompatActivity {
 
         fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
         fab_close = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fab_close);
-        final FloatingActionButton fab = findViewById(R.id.fabsave);
+        final FloatingActionButton fab = findViewById(R.id.FABSave);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -115,7 +120,8 @@ public class NotesActivity extends AppCompatActivity {
                 .show();
         }
         else{
-//            MainActivity.refreshRecyclerView();
+//            MainActivity mainActivity = new MainActivity();
+//            mainActivity.refreshRecyclerView();
             super.onBackPressed();
         }
     }
@@ -123,7 +129,7 @@ public class NotesActivity extends AppCompatActivity {
     private class GenericTextWatcher implements TextWatcher {
         //Simplifies the code instead of making two duplicated text watcher
         //Since a textwatcher can only be defined when called
-        final FloatingActionButton fabsave = findViewById(R.id.fabsave);
+        final FloatingActionButton fabsave = findViewById(R.id.FABSave);
 
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
@@ -146,7 +152,7 @@ public class NotesActivity extends AppCompatActivity {
         String textname =  nameview.getText().toString();
         String textnote =  noteview.getText().toString();
         lastid += 1;
-        coordinatorLayout = findViewById(R.id.mainnotelayout);
+        coordinatorLayout = findViewById(R.id.mainNoteLayout);
 
         if (textname.equals("") && textnote.equals("")){
             Snackbar.make(coordinatorLayout, "Nothing to save", Snackbar.LENGTH_LONG)
