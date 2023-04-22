@@ -24,6 +24,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private Context mContext;
     OldDatabaseHelper mDatabaseHelper;
 
+
+    //TODO:Reorganize this class
     public RecyclerViewAdapter(Context context, ArrayList<String> noteNames, ArrayList<String> notes, ArrayList<Integer> positions) {
         this.mNoteNames = noteNames;
         this.mNotes = notes;
@@ -59,8 +61,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                    MainActivity.mNoteNames.remove(position);
                    MainActivity.mNotes.remove(position);
                    MainActivity.mPosition.remove(position);
+//                   MainActivity.adapter.notifyDataSetChanged(); //Find a better way to do this
 //                   MainActivity.adapter.notifyDataSetChanged(); Crashing the app
-//                   MainActivity.adapter.notifyItemRemoved(position);
+                   MainActivity.adapter.notifyItemRemoved(position);
                    mDatabaseHelper.Delete(dbPosition);
                }
            })
@@ -75,10 +78,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, NotesActivity.class);
-                intent.putExtra("note_name", mNoteNames.get(position));
-                intent.putExtra("note_desc", mNotes.get(position));
+                intent.putExtra("noteName", mNoteNames.get(position));
+                intent.putExtra("noteDesc", mNotes.get(position));
                 intent.putExtra("position", position);
-                intent.putExtra("trueposition", dbPosition);
+                intent.putExtra("truePosition", dbPosition);
                 intent.putExtra("last", last);
                 mContext.startActivity(intent);
             }

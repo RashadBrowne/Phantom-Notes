@@ -19,18 +19,16 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+    OldDatabaseHelper mDatabaseHelper;
     static ArrayList<String> mNoteNames = new ArrayList<>();
     static ArrayList<String> mNotes = new ArrayList<>();
     static ArrayList<Integer> mPosition = new ArrayList<>();
     static RecyclerViewAdapter adapter;
     static RecyclerView recyclerView;
-    OldDatabaseHelper mDatabaseHelper;
-
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////Activity Lifecycle Modifiers////////////////////////////////////////////////////////////////////
-    //TODO: Name things properly
      @Override
     protected void onCreate(Bundle savedInstanceState) {
          super.onCreate(savedInstanceState);
@@ -63,38 +61,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-////Option Menu Code////////////////////////////////////////////////////////////////////////////////
-     //TODO: Add to the options menu
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Intent intent = new Intent(getApplicationContext(), NotesActivity.class);
-            startActivity(intent);
-            return true;
-        }
-
-        if (id == R.id.action_settings2) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 ////Recycler View Code//////////////////////////////////////////////////////////////////////////////
 
     public void refreshRecyclerView(){
@@ -119,18 +85,51 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void initRecyclerView() {
-        //RecyclerView
         recyclerView = findViewById(R.id.recycler_view);
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, mNoteNames, mNotes, mPosition);
+
+        adapter = new RecyclerViewAdapter(this, mNoteNames, mNotes, mPosition);
         recyclerView.setAdapter(adapter);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-//        linearLayoutManager.setReverseLayout(true);
         recyclerView.setLayoutManager(linearLayoutManager);
     }
 
-    private void createToastMessage(String message){
-        Toast.makeText(this,message, Toast.LENGTH_SHORT).show();
+//    private void createToastMessage(String message){
+//        Toast.makeText(this,message, Toast.LENGTH_SHORT).show();
+//    }
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////Option Menu Code////////////////////////////////////////////////////////////////////////////////
+    //TODO: Add to the options menu
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will automatically handle clicks on
+        // the Home/Up button, so long as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        //TODO: Convert to switch statement
+        if (id == R.id.action_settings) {
+            Intent intent = new Intent(getApplicationContext(), NotesActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
+        if (id == R.id.action_settings2) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
+

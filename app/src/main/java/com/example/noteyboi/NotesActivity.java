@@ -27,14 +27,14 @@ public class NotesActivity extends AppCompatActivity {
     //TODO: Clean up this database code, it should be entirely in databasehelper
     //TODO: Test for and fix the reloading glitch
     int noteId = -1;
-    int lastid = 0;
-    int trueposition = 0;
-    private TextView nameview, noteview;
+    int lastId = 0;
+    int truePosition = 0;
+    private TextView nameView, noteView;
     private Animation fab_open,fab_close;
     boolean showSave = false;
     CoordinatorLayout coordinatorLayout;
     OldDatabaseHelper mDatabaseHelper;
-    static ArrayList<Integer> lastpos = new ArrayList<>();
+    static ArrayList<Integer> lastPosition = new ArrayList<>();
 
 
     //TODO: Work on autocorrect in the settings menu
@@ -46,17 +46,21 @@ public class NotesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notes);
 
-        getIncomingIntentEdit();
+        //Initialize
         mDatabaseHelper = new OldDatabaseHelper(this);
-        nameview = findViewById(R.id.NoteName);
-        noteview = findViewById(R.id.Notes);
 
-        noteview.setLinksClickable(true);
-        noteview.setAutoLinkMask(Linkify.WEB_URLS);
+        nameView = findViewById(R.id.NoteName);
+        noteView = findViewById(R.id.Notes);
+
+        getIncomingIntent();
+
+        //Configure
+        noteView.setLinksClickable(true);
+        noteView.setAutoLinkMask(Linkify.WEB_URLS);
         //If the edit text contains previous text with potential links
         //Linkify has options "WEB_URLS, PHONE_NUMBERS, EMAIL_ADDRESSES"
-        Linkify.addLinks(noteview   , Linkify.ALL);
-        noteview.setMovementMethod(LinkMovementMethod.getInstance());
+        Linkify.addLinks(noteView, Linkify.ALL);
+        noteView.setMovementMethod(LinkMovementMethod.getInstance());
 
         fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
         fab_close = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fab_close);
@@ -71,14 +75,14 @@ public class NotesActivity extends AppCompatActivity {
         });
     }
 
-    private void getIncomingIntentEdit(){
-        //Receive info from the recycler view
-        if (getIntent().hasExtra("note_name") && getIntent().hasExtra("note_desc")) {
-            String noteName = getIntent().getStringExtra("note_name");
-            String noteDesc = getIntent().getStringExtra("note_desc");
+    private void getIncomingIntent(){
+        //Receive the data sent from the recycler view
+        if (getIntent().hasExtra("noteName") && getIntent().hasExtra("noteDesc")) {
+            String noteName = getIntent().getStringExtra("noteName");
+            String noteDesc = getIntent().getStringExtra("noteDesc");
             noteId = getIntent().getIntExtra("position", -1);
-            trueposition = getIntent().getIntExtra("trueposition", 0);
-            lastid = getIntent().getIntExtra("last", 0);
+            truePosition = getIntent().getIntExtra("truePosition", 0);
+            lastId = getIntent().getIntExtra("last", 0);
 
             setInfoEdit(noteName, noteDesc);
         } else {
@@ -86,19 +90,17 @@ public class NotesActivity extends AppCompatActivity {
         }
     }
 
-    private void setInfoEdit(String Name, String Desc){
+    private void setInfoEdit(String Name, String Note){
         //As we populate more items its better to make a class to do it
-        TextView name = findViewById(R.id.NoteName);
-        TextView desc = findViewById(R.id.Notes);
-        name.setText(Name);
-        desc.setText(Desc);
-        name.addTextChangedListener(new GenericTextWatcher());
-        desc.addTextChangedListener(new GenericTextWatcher());
+        nameView.setText(Name);
+        noteView.setText(Note);
+        nameView.addTextChangedListener(new GenericTextWatcher());
+        noteView.addTextChangedListener(new GenericTextWatcher());
     }
 
     @Override
     public void onBackPressed() {
-        //Make sure the user saves changes if they want to
+        //Display a save prompt for the user
         if(showSave){
             new AlertDialog.Builder(this)
                 .setTitle("Do you want to leave without saving changes?")
@@ -120,8 +122,6 @@ public class NotesActivity extends AppCompatActivity {
                 .show();
         }
         else{
-//            MainActivity mainActivity = new MainActivity();
-//            mainActivity.refreshRecyclerView();
             super.onBackPressed();
         }
     }
@@ -129,16 +129,17 @@ public class NotesActivity extends AppCompatActivity {
     private class GenericTextWatcher implements TextWatcher {
         //Simplifies the code instead of making two duplicated text watcher
         //Since a textwatcher can only be defined when called
-        final FloatingActionButton fabsave = findViewById(R.id.FABSave);
+        final FloatingActionButton fabSave = findViewById(R.id.FABSave);
 
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            //TODO: Add a check to make sure its not the same as the text in the db
             if(!showSave){
-                fabsave.startAnimation(fab_open);
-                fabsave.show();
+                fabSave.startAnimation(fab_open);
+                fabSave.show();
                 showSave = true;
             }
         }
@@ -149,37 +150,35 @@ public class NotesActivity extends AppCompatActivity {
     }
 
     public void SaveNote(){
-        String textname =  nameview.getText().toString();
-        String textnote =  noteview.getText().toString();
-        lastid += 1;
+        String textName =  nameView.getText().toString();
+        String textNote =  noteView.getText().toString();
+//        lastId += 1;
         coordinatorLayout = findViewById(R.id.mainNoteLayout);
 
-        if (textname.equals("") && textnote.equals("")){
+        if (textName.equals("") && textNote.equals("")){
             Snackbar.make(coordinatorLayout, "Nothing to save", Snackbar.LENGTH_LONG)
                     .setAction("??", null).show();
+//            return;
         } else {
-            if (noteId <= -1) {
-                MainActivity.mNoteNames.add("");
-                MainActivity.mNotes.add("");
-                noteId = MainActivity.mNoteNames.size() - 1;
+            if (noteId <= -1) {//Save new note
+                noteId = MainActivity.mNoteNames.size();
 
                 //TODO: Make this a try catch using the main function
-                AddData(textname,textnote);
+                AddData(textName,textNote);
 
-                Cursor data = mDatabaseHelper.getData();
-                while(data.moveToNext()) {
-                    lastpos.add(data.getInt(0));
-                }
-                trueposition = lastid = lastpos.get(lastpos.size() - 1);
-                MainActivity.mPosition.add(lastid);
-            } else {
-                mDatabaseHelper.UpdateRow(textname,textnote, trueposition);
+//                Cursor data = mDatabaseHelper.getData();
+//                truePosition = data.getCount() - 1;
+//                while(data.moveToNext()) {
+//                    lastPosition.add(data.getInt(0));
+//                }
+//                truePosition = lastPosition.get(lastPosition.size() - 1);
+//                MainActivity.mPosition.add(truePosition);
+            } else {//Update existing note
+                mDatabaseHelper.UpdateRow(textName,textNote, truePosition);
+//                mDatabaseHelper.UpdateRow(textName,textNote, noteId);
             }
-
-            MainActivity.mNoteNames.set(noteId, textname);
-            MainActivity.mNotes.set(noteId, textnote);
-//            MainActivity.adapter.notifyDataSetChanged();
             showSave = false;
+            //TODO: Convert to toast?
             Snackbar.make(coordinatorLayout, "Saved", Snackbar.LENGTH_LONG)
                     .setAction("??", null).show();
         }
@@ -190,13 +189,13 @@ public class NotesActivity extends AppCompatActivity {
         boolean insertData = mDatabaseHelper.addData(Name,Note);
 
         if (insertData){
-            toastMessage("Saved Successfully");
+            createToastMessage("Saved Successfully");
         } else{
-            toastMessage("Something went wrong while saving");
+            createToastMessage("Something went wrong while saving");
         }
     }
 
-    private void toastMessage(String message){
+    private void createToastMessage(String message){
         Toast.makeText(this,message, Toast.LENGTH_SHORT).show();
     }
 }

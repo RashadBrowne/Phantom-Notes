@@ -27,7 +27,7 @@
                 android:ems="10"
                 android:hint="@string/Access_Hint_NoteName"
                 android:importantForAutofill="no"
-                android:inputType="textPersonName"
+                android:inputType="textPersonName|textCapWords"
                 android:textSize="25sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"

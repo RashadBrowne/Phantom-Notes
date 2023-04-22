@@ -9,9 +9,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 public class OldDatabaseHelper extends SQLiteOpenHelper {
-    private static final String TAG = "DatabaseHelper";
+//    private static final String TAG = "DatabaseHelper";
     private static final String TABLE_NAME = "simplenotes";
-    private static final String COL1 = "ID";//Actually column 0
+//    private static final String COL1 = "ID";//Actually column 0
     private static final String COL2 = "NAMES";
     private static final String COL3 = "NOTES";
     private static final int DATABASE_VERSION = 1;
