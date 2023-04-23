@@ -1,7 +1,5 @@
 package com.example.noteyboi;
 
-import static com.example.noteyboi.MainActivity.recyclerView;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -22,15 +20,22 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private ArrayList<String> mNotes = new ArrayList<>();
     private ArrayList<Integer> mPosition = new ArrayList<>();
     private Context mContext;
-    OldDatabaseHelper mDatabaseHelper;
+    SQLManager mDatabaseHelper;
+    private ArrayList<DatabaseObject> mDBObjects;
+
 
 
     //TODO:Reorganize this class
-    public RecyclerViewAdapter(Context context, ArrayList<String> noteNames, ArrayList<String> notes, ArrayList<Integer> positions) {
-        this.mNoteNames = noteNames;
-        this.mNotes = notes;
-        this.mPosition = positions;
+//    public RecyclerViewAdapter(Context context, ArrayList<String> noteNames, ArrayList<String> notes, ArrayList<Integer> positions) {
+//        this.mContext = context;
+//        this.mNoteNames = noteNames;
+//        this.mNotes = notes;
+//        this.mPosition = positions;
+//    }
+
+    public RecyclerViewAdapter(Context context, ArrayList<DatabaseObject> Objects) {
         this.mContext = context;
+        this.mDBObjects = Objects;
     }
 
     @Override
@@ -43,10 +48,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
         //Populating the layout
-        holder.noteName.setText(mNoteNames.get(position));
-        holder.note.setText(mNotes.get(position));
-        final int dbPosition = mPosition.get(position);
-        final int last = mPosition.get(mPosition.size() - 1);
+
+        holder.noteName.setText(mDBObjects.get(position).getName());
+        holder.note.setText(mDBObjects.get(position).getNote());
+        final int ID = mDBObjects.get(position).getId();
+        final int last = mPosition.get(mDBObjects.size() - 1);
         //Prompt for unsaved changes
         holder.parentLayout.setOnLongClickListener(new View.OnLongClickListener() {
            @Override
@@ -57,14 +63,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                @Override
                public void onClick(DialogInterface dialogInterface, int i) {
-                   mDatabaseHelper = new OldDatabaseHelper(mContext);
-                   MainActivity.mNoteNames.remove(position);
-                   MainActivity.mNotes.remove(position);
-                   MainActivity.mPosition.remove(position);
+                   mDatabaseHelper = new SQLManager(mContext);
+//                   MainActivity.mNoteNames.remove(position);
+//                   MainActivity.mNotes.remove(position);
+//                   MainActivity.mID.remove(position);
 //                   MainActivity.adapter.notifyDataSetChanged(); //Find a better way to do this
 //                   MainActivity.adapter.notifyDataSetChanged(); Crashing the app
+                   MainActivity.mDBObjects.remove(position);
                    MainActivity.adapter.notifyItemRemoved(position);
-                   mDatabaseHelper.Delete(dbPosition);
+                   mDatabaseHelper.Delete(ID);
                }
            })
                     .setNegativeButton("No", null)
@@ -73,15 +80,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
            }
        });
 
-        //Passing the information into the activity thats made when it's clicked then starting it
+        //Passing the information into the activity that's made when it's clicked then starting it
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, NotesActivity.class);
-                intent.putExtra("noteName", mNoteNames.get(position));
-                intent.putExtra("noteDesc", mNotes.get(position));
-                intent.putExtra("position", position);
-                intent.putExtra("truePosition", dbPosition);
+                intent.putExtra("noteName", mDBObjects.get(position).getName());
+                intent.putExtra("noteDesc", mDBObjects.get(position).getNote());
+                intent.putExtra("ID", mDBObjects.get(position).getId());
                 intent.putExtra("last", last);
                 mContext.startActivity(intent);
             }

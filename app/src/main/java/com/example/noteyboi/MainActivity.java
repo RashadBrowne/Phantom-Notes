@@ -1,7 +1,6 @@
 package com.example.noteyboi;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -10,19 +9,13 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
-
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    OldDatabaseHelper mDatabaseHelper;
-    static ArrayList<String> mNoteNames = new ArrayList<>();
-    static ArrayList<String> mNotes = new ArrayList<>();
-    static ArrayList<Integer> mPosition = new ArrayList<>();
+    SQLManager mDatabaseHelper;
+    static ArrayList<DatabaseObject> mDBObjects = new ArrayList<>();
     static RecyclerViewAdapter adapter;
     static RecyclerView recyclerView;
 
@@ -36,20 +29,17 @@ public class MainActivity extends AppCompatActivity {
          Toolbar toolbar = findViewById(R.id.toolbar);
          setSupportActionBar(toolbar);
 
-         ////////////////////////////////////////////////////////////////////////////////////////////
-         mDatabaseHelper = new OldDatabaseHelper(this);
+         ///////////////////////////////////////////////////////////////////////////////////////////
+         mDatabaseHelper = new SQLManager(this);
          loadRecyclerViewData();
-         ////////////////////////////////////////////////////////////////////////////////////////////
+         ///////////////////////////////////////////////////////////////////////////////////////////
 
          FloatingActionButton fab = findViewById(R.id.fab);
-         fab.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View view) {
-                 Snackbar.make(view, "Created New Note", Snackbar.LENGTH_LONG)
-                         .setAction("??", null).show();
-                 Intent intent = new Intent(getApplicationContext(), NotesActivity.class);
-                 startActivity(intent);
-             }
+         fab.setOnClickListener(view -> {
+             Snackbar.make(view, "Created New Note", Snackbar.LENGTH_LONG)
+                     .setAction("??", null).show();
+             Intent intent = new Intent(getApplicationContext(), NotesActivity.class);
+             startActivity(intent);
          });
      }
 
@@ -64,23 +54,12 @@ public class MainActivity extends AppCompatActivity {
 ////Recycler View Code//////////////////////////////////////////////////////////////////////////////
 
     public void refreshRecyclerView(){
-        mPosition.removeAll(mPosition);
-        mNoteNames.removeAll(mNoteNames);
-        mNotes.removeAll(mNotes);
-
+        mDBObjects.removeAll(mDBObjects);
         loadRecyclerViewData();
     }
 
     public void loadRecyclerViewData(){
-        Cursor data = mDatabaseHelper.getData();
-        //Would've been better to load objects so I could sort the objects by field
-        // Also should have included a modified date into the Database schema
-        // TODO: Change to loading objects
-        while(data.moveToNext()){
-            mPosition.add(data.getInt(0));//get items from column zero
-            mNoteNames.add(data.getString(1));//get items from column one
-            mNotes.add(data.getString(2));//get items from column two
-        }
+        mDBObjects = mDatabaseHelper.getData();
         initRecyclerView();
     }
 
@@ -88,17 +67,12 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recycler_view);
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
 
-        adapter = new RecyclerViewAdapter(this, mNoteNames, mNotes, mPosition);
+        adapter = new RecyclerViewAdapter(this, mDBObjects);
         recyclerView.setAdapter(adapter);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
     }
-
-//    private void createToastMessage(String message){
-//        Toast.makeText(this,message, Toast.LENGTH_SHORT).show();
-//    }
-
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

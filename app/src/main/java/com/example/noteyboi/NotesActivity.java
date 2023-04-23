@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import android.content.DialogInterface;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -27,14 +26,11 @@ public class NotesActivity extends AppCompatActivity {
     //TODO: Clean up this database code, it should be entirely in databasehelper
     //TODO: Test for and fix the reloading glitch
     int noteId = -1;
-    int lastId = 0;
-    int truePosition = 0;
     private TextView nameView, noteView;
     private Animation fab_open,fab_close;
     boolean showSave = false;
     CoordinatorLayout coordinatorLayout;
-    OldDatabaseHelper mDatabaseHelper;
-    static ArrayList<Integer> lastPosition = new ArrayList<>();
+    SQLManager mDatabaseHelper;
 
 
     //TODO: Work on autocorrect in the settings menu
@@ -47,7 +43,7 @@ public class NotesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_notes);
 
         //Initialize
-        mDatabaseHelper = new OldDatabaseHelper(this);
+        mDatabaseHelper = new SQLManager(this);
 
         nameView = findViewById(R.id.NoteName);
         noteView = findViewById(R.id.Notes);
@@ -80,9 +76,10 @@ public class NotesActivity extends AppCompatActivity {
         if (getIntent().hasExtra("noteName") && getIntent().hasExtra("noteDesc")) {
             String noteName = getIntent().getStringExtra("noteName");
             String noteDesc = getIntent().getStringExtra("noteDesc");
-            noteId = getIntent().getIntExtra("position", -1);
-            truePosition = getIntent().getIntExtra("truePosition", 0);
-            lastId = getIntent().getIntExtra("last", 0);
+//            noteId = getIntent().getIntExtra("position", -1);
+//            truePosition = getIntent().getIntExtra("truePosition", 0);
+            noteId = getIntent().getIntExtra("ID", -1);
+//            lastId = getIntent().getIntExtra("last", 0);
 
             setInfoEdit(noteName, noteDesc);
         } else {
@@ -161,10 +158,18 @@ public class NotesActivity extends AppCompatActivity {
 //            return;
         } else {
             if (noteId <= -1) {//Save new note
-                noteId = MainActivity.mNoteNames.size();
+//                noteId = MainActivity.mNoteNames.size();
 
                 //TODO: Make this a try catch using the main function
-                AddData(textName,textNote);
+
+                noteId = mDatabaseHelper.addData(textName,textNote);
+
+                if (noteId != -1){
+                    createToastMessage("Saved Successfully");
+                } else{
+                    createToastMessage("Something went wrong while saving");
+                }
+//                AddData(textName,textNote);
 
 //                Cursor data = mDatabaseHelper.getData();
 //                truePosition = data.getCount() - 1;
@@ -174,24 +179,13 @@ public class NotesActivity extends AppCompatActivity {
 //                truePosition = lastPosition.get(lastPosition.size() - 1);
 //                MainActivity.mPosition.add(truePosition);
             } else {//Update existing note
-                mDatabaseHelper.UpdateRow(textName,textNote, truePosition);
-//                mDatabaseHelper.UpdateRow(textName,textNote, noteId);
+//                mDatabaseHelper.UpdateRow(textName,textNote, truePosition);
+                mDatabaseHelper.UpdateRow(textName,textNote, noteId);
             }
             showSave = false;
             //TODO: Convert to toast?
             Snackbar.make(coordinatorLayout, "Saved", Snackbar.LENGTH_LONG)
                     .setAction("??", null).show();
-        }
-    }
-
-    //for sqlite
-    private void AddData(String Name, String Note){
-        boolean insertData = mDatabaseHelper.addData(Name,Note);
-
-        if (insertData){
-            createToastMessage("Saved Successfully");
-        } else{
-            createToastMessage("Something went wrong while saving");
         }
     }
 
