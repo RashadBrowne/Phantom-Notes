@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -43,23 +44,26 @@ public class SQLManager extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues =  new ContentValues();
 
+        String CurrentTime = new Date(Calendar.getInstance().getTimeInMillis()).toString();
         contentValues.put(COL2, Name);
         contentValues.put(COL3, Note);
-        contentValues.put(COL4, (new Date(Calendar.getInstance().getTimeInMillis())).toString());
-        contentValues.put(COL5, (new Date(Calendar.getInstance().getTimeInMillis())).toString());
-        long result = (db.insert(TABLE_NAME, null, contentValues));
-        db.close();
+        contentValues.put(COL4, CurrentTime);
+        contentValues.put(COL5, CurrentTime);
 
-        //-1 if not inserted correctly
-        if (result == -1){
-//            return false;
-            return -1;
+        long result = (db.insert(TABLE_NAME, null, contentValues));
+        int Id = -1;
+
+        if (result > -1){//If inserted correctly
+//            String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COL4 + " = " + CurrentTime;
+//            String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COL2 + " = '" + Name + "' AND " + COL4 + " = " + CurrentTime;
+            String query = "SELECT * FROM " + TABLE_NAME;
+            Cursor data = db.rawQuery(query, null);
+            data.moveToLast();
+            Id = data.getInt(0);
+            Log.d("wtf", "addData: " + Id);
         }
-        else{
-//            return true; Return ID
-            String query = "SELECT ID FROM " + TABLE_NAME + "WHERE " + COL2 + " = " + Name + " AND " + COL3 + " = " + Note;
-            return (db.rawQuery(query, null)).getInt(0);
-        }
+        db.close();
+        return Id;
     }
 
     public void UpdateRow(String Name, String Note, int Id){//Change to bool
@@ -88,11 +92,9 @@ public class SQLManager extends SQLiteOpenHelper {
         while(data.moveToNext()){
             // TODO: Add proper created and modified dates
             DatabaseObject tempData = new DatabaseObject(data.getInt(0), data.getString(1),data.getString(2), 0, 0);
-//            mID.add();//get items from column zero
-//            mNoteNames.add();//get items from column one
-//            mNotes.add(data.getString(2));//get items from column two
             objectList.add(tempData);
         }
+        data.close();
         return objectList;
     }
 }

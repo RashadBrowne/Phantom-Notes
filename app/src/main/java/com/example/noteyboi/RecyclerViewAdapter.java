@@ -2,8 +2,8 @@ package com.example.noteyboi;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,23 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
-
-    private ArrayList<String> mNoteNames = new ArrayList<>();
-    private ArrayList<String> mNotes = new ArrayList<>();
-    private ArrayList<Integer> mPosition = new ArrayList<>();
-    private Context mContext;
+    private final Context mContext;
     SQLManager mDatabaseHelper;
-    private ArrayList<DatabaseObject> mDBObjects;
+    private final ArrayList<DatabaseObject> mDBObjects;
 
-
-
-    //TODO:Reorganize this class
-//    public RecyclerViewAdapter(Context context, ArrayList<String> noteNames, ArrayList<String> notes, ArrayList<Integer> positions) {
-//        this.mContext = context;
-//        this.mNoteNames = noteNames;
-//        this.mNotes = notes;
-//        this.mPosition = positions;
-//    }
 
     public RecyclerViewAdapter(Context context, ArrayList<DatabaseObject> Objects) {
         this.mContext = context;
@@ -48,55 +35,42 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
         //Populating the layout
-
         holder.noteName.setText(mDBObjects.get(position).getName());
+        Log.d("FFS", "onBindViewHolder: " + mDBObjects.get(position).getName());
         holder.note.setText(mDBObjects.get(position).getNote());
         final int ID = mDBObjects.get(position).getId();
-        final int last = mPosition.get(mDBObjects.size() - 1);
+//        int last = mPosition.get(mDBObjects.size() - 1);
+
         //Prompt for unsaved changes
-        holder.parentLayout.setOnLongClickListener(new View.OnLongClickListener() {
-           @Override
-           public boolean onLongClick(View view) {
-               new AlertDialog.Builder(mContext)
-                       .setTitle("Are you sure?")
-                       .setMessage("Do you want to delete this note?")
-                       .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-               @Override
-               public void onClick(DialogInterface dialogInterface, int i) {
-                   mDatabaseHelper = new SQLManager(mContext);
-//                   MainActivity.mNoteNames.remove(position);
-//                   MainActivity.mNotes.remove(position);
-//                   MainActivity.mID.remove(position);
-//                   MainActivity.adapter.notifyDataSetChanged(); //Find a better way to do this
-//                   MainActivity.adapter.notifyDataSetChanged(); Crashing the app
-                   MainActivity.mDBObjects.remove(position);
-                   MainActivity.adapter.notifyItemRemoved(position);
-                   mDatabaseHelper.Delete(ID);
-               }
-           })
-                    .setNegativeButton("No", null)
-                    .show();
-                 return true;
-           }
-       });
+        holder.parentLayout.setOnLongClickListener(view -> {
+            new AlertDialog.Builder(mContext)
+                    .setTitle("Are you sure?")
+                    .setMessage("Do you want to delete this note?")
+                    .setPositiveButton("Yes", (dialogInterface, i) -> {
+                        mDatabaseHelper = new SQLManager(mContext);
+                        MainActivity.mDBObjects.remove(position);
+//                        MainActivity.adapter.notifyItemRemoved(position);
+                        MainActivity.adapter.notifyDataSetChanged();
+                        mDatabaseHelper.Delete(ID);
+                    })
+                 .setNegativeButton("No", null)
+                 .show();
+              return true;
+        });
 
         //Passing the information into the activity that's made when it's clicked then starting it
-        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(mContext, NotesActivity.class);
-                intent.putExtra("noteName", mDBObjects.get(position).getName());
-                intent.putExtra("noteDesc", mDBObjects.get(position).getNote());
-                intent.putExtra("ID", mDBObjects.get(position).getId());
-                intent.putExtra("last", last);
-                mContext.startActivity(intent);
-            }
+        holder.parentLayout.setOnClickListener(view -> {
+            Intent intent = new Intent(mContext, NotesActivity.class);
+            intent.putExtra("noteName", mDBObjects.get(position).getName());
+            intent.putExtra("noteDesc", mDBObjects.get(position).getNote());
+            intent.putExtra("ID", mDBObjects.get(position).getId());
+            mContext.startActivity(intent);
         });
     }
 
     @Override
     public int getItemCount() {
-        return mNoteNames.size();
+        return mDBObjects.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
