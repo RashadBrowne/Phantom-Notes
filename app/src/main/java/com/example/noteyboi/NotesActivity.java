@@ -112,8 +112,6 @@ public class NotesActivity extends AppCompatActivity {
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            //TODO: Add a check to make sure its not the same as the text in the db
-
             if(hasTextChanged()){
                 if(!showSave){
                     fabSave.startAnimation(fab_open);

@@ -1,8 +1,10 @@
 <resources>
-    <string name="app_name">Simple Notes</string>
+    <string name="app_name">Phantom Notes</string>
     <string name="action_settings">New note</string>
     <string name="action_settings2">Version 1 - Beta 2</string>
     <string name="Access_Hint_Notes">Note</string>
     <string name="Access_Hint_NoteName">Name</string>
     <string name="Access_Hint_Save">Save</string>
+    <string name="search">Search</string>
+    <string name="Create_New_Note">Create new note</string>
 </resources>

@@ -6,8 +6,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
-
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -54,13 +52,12 @@ public class SQLManager extends SQLiteOpenHelper {
         int Id = -1;
 
         if (result > -1){//If inserted correctly
-//            String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COL4 + " = " + CurrentTime;
 //            String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COL2 + " = '" + Name + "' AND " + COL4 + " = " + CurrentTime;
             String query = "SELECT * FROM " + TABLE_NAME;
             Cursor data = db.rawQuery(query, null);
             data.moveToLast();
             Id = data.getInt(0);
-            Log.d("wtf", "addData: " + Id);
+            data.close();
         }
         db.close();
         return Id;
