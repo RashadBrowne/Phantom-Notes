@@ -1,5 +1,7 @@
 <resources>
-    <dimen name="fab_margin">16dp</dimen>
-    <dimen name="cornerRadius1">10dp</dimen>
-    <dimen name="cornerRadius2">15dp</dimen>
+    <dimen name="fabMargin">16dp</dimen>
+    <dimen name="cornerRadiusSmall">10dp</dimen>
+    <dimen name="cornerRadiusBig">15dp</dimen>
+    <dimen name="elevationSmall">5dp</dimen>
+    <dimen name="elevationBig">10dp</dimen>
 </resources>

@@ -5,7 +5,7 @@
     android:id="@+id/mainNoteLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/darkShade3"
+    android:background="@color/ElevationColorBottom"
     tools:context=".MainActivity">
 
     <include
@@ -18,9 +18,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
+        android:layout_margin="@dimen/fabMargin"
         android:contentDescription="@string/Access_Hint_Save"
-        android:tint="#fff"
+        android:tint="#FFFFFF"
         android:visibility="invisible"
         app:srcCompat="@android:drawable/ic_menu_save" />
 

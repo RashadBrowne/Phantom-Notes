@@ -8,9 +8,9 @@
     android:layout_marginTop="15dp"
     android:layout_marginEnd="15dp"
     android:translationZ="@dimen/cardview_compat_inset_shadow"
-    app:cardBackgroundColor="@color/darkShade2"
-    app:cardCornerRadius="@dimen/cornerRadius1"
-    app:cardElevation="0dp">
+    app:cardBackgroundColor="@color/ElevationColorMiddle"
+    app:cardCornerRadius="@dimen/cornerRadiusSmall"
+    app:cardElevation="@dimen/elevationSmall">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/parent_layout"
@@ -31,7 +31,7 @@
             android:maxLines="3"
             android:text="Description"
             android:textAllCaps="false"
-            android:textColor="#ccc"
+            android:textColor="@color/colorText"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

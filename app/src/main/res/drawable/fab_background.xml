@@ -13,6 +13,6 @@
         android:bottom="5dp"/>
 
     <corners
-        android:radius="@dimen/cornerRadius2"
+        android:radius="@dimen/cornerRadiusBig"
         />
 </shape>

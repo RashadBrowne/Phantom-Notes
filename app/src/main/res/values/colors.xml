@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#171717</color>
+    <color name="colorPrimary">#15161F</color>
     <color name="colorPrimaryDark">#000000</color>
 
-    <color name="darkShade1">#272B2F</color>
-    <color name="darkShade2">#15161F</color>
-    <color name="darkShade3">#000000</color>
+    <color name="ElevationColorTop">#FFFFFF</color>
+    <color name="ElevationColorMiddle">#E5E6EF</color>
+    <color name="ElevationColorBottom">#DFDFDF</color>
     <color name="colorAccent">#2BC9C9</color>
     <color name="colorDisabled">#ADD1FF</color>
-    <color name="colorTextWhite">#D8D8D8</color>
-    <color name="colorTextBlack">#000000</color>
+    <color name="colorText">#000000</color>
+    <color name="colorTextDimmed">#444444</color>
+    <color name="colorTextInverted">#D8D8D8</color>
 </resources>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/darkShade3"
+    android:background="@color/ElevationColorBottom"
     tools:context=".MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,8 +15,9 @@
             android:id="@+id/toolbarLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="@color/darkShade3"
+            android:background="@color/ElevationColorBottom"
             android:theme="@style/AppTheme.AppBarOverlay"
+            app:elevation="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -25,6 +26,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                android:elevation="0dp"
                 app:popupTheme="@style/AppTheme.PopupOverlay"
                 app:title=' '>
 
@@ -34,7 +36,7 @@
                     android:fontFamily="sans-serif-condensed"
                     android:maxLines="1"
                     android:text="@string/app_name"
-                    android:textColor="#FFF"
+                    android:textColor="@color/colorText"
                     android:textSize="20sp"
                     android:textStyle="bold" />
             </androidx.appcompat.widget.Toolbar>
@@ -51,16 +53,19 @@
             android:autofillHints=""
             android:background="@drawable/searchbar_style"
             android:ems="10"
+            android:fontFamily="sans-serif-condensed"
             android:hint="@string/search"
             android:inputType="text"
             android:minHeight="48dp"
             android:paddingVertical="10dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
+            android:shadowColor="#000"
             android:singleLine="true"
-            android:textColor="#ccc"
-            android:textColorHint="#999"
-            android:fontFamily="sans-serif-condensed"
+            android:textColor="@color/colorText"
+            android:textColorHint="@color/colorTextDimmed"
+            android:textSize="20sp"
+            app:cardElevation="@dimen/elevationSmall"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -85,7 +90,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
+        android:layout_margin="@dimen/fabMargin"
         android:tint="#fff"
         app:srcCompat="@android:drawable/ic_input_add" />
     

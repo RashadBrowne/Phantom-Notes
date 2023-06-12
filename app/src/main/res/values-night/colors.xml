@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#15161F</color>
+    <color name="colorPrimaryDark">#000000</color>
+
+    <color name="ElevationColorTop">#272B2F</color>
+    <color name="ElevationColorMiddle">#15161F</color>
+    <color name="ElevationColorBottom">#000000</color>
+    <color name="colorAccent">#2BC9C9</color>
+    <color name="colorDisabled">#ADD1FF</color>
+    <color name="colorText">#D8D8D8</color>
+    <color name="colorTextDimmed">#999999</color>
+    <color name="colorTextInverted">#000000</color>
+</resources>
