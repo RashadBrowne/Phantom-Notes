@@ -4,3 +4,5 @@ DD-MM/YY
 21-4/23 Build 1: General cleanup and improvements. Layouts are generally sorted awaiting the overhaul.
 23-4/23 Build 1: Decoupled the classes by using a single database object
 11-6/23 Build 1: Made the final layout and alternate recycler view layout
+
+-Rebranded-
