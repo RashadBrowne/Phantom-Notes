@@ -10,6 +10,7 @@ import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.TextView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -19,6 +20,7 @@ public class NotesActivity extends AppCompatActivity {
     //TODO: Test for and fix the reloading glitch
     int noteId = -1;
     private TextView nameView, noteView;
+    private Button saveNote;
     private String noteName, noteDesc;
     private Animation fab_open,fab_close;
     boolean showSave = false;
@@ -50,14 +52,13 @@ public class NotesActivity extends AppCompatActivity {
         Linkify.addLinks(noteView, Linkify.ALL);
         noteView.setMovementMethod(LinkMovementMethod.getInstance());
 
-        fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
-        fab_close = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fab_close);
-        final FloatingActionButton fab = findViewById(R.id.FABSave);
-        fab.setOnClickListener(view -> {
+        //Save button set up
+        saveNote = findViewById(R.id.buttonSave);
+        saveNote.setOnClickListener(view -> {
             SaveNote();
-            fab.startAnimation(fab_close);
-            fab.hide();
+            saveNote.setEnabled(false);
         });
+        saveNote.setEnabled(false);
     }
 
     private void getIncomingIntent(){
@@ -105,7 +106,7 @@ public class NotesActivity extends AppCompatActivity {
     private class GenericTextWatcher implements TextWatcher {
         //Simplifies the code instead of making two duplicated text watcher
         //Since a text-watcher can only be defined when called
-        final FloatingActionButton fabSave = findViewById(R.id.FABSave);
+//        final FloatingActionButton fabSave = findViewById(R.id.FABSave);
 
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
@@ -114,13 +115,11 @@ public class NotesActivity extends AppCompatActivity {
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             if(hasTextChanged()){
                 if(!showSave){
-                    fabSave.startAnimation(fab_open);
-                    fabSave.show();
+                    saveNote.setEnabled(true);
                     showSave = true;
                 }
             } else {
-                fabSave.startAnimation(fab_close);
-                fabSave.hide();
+                saveNote.setEnabled(false);
                 showSave = false;
             }
         }

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/ElevationColorBottom"
+    android:background="@color/backgroundElevation"
     tools:context=".MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,7 +15,7 @@
             android:id="@+id/toolbarLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="@color/ElevationColorBottom"
+            android:background="@color/backgroundElevation"
             android:theme="@style/AppTheme.AppBarOverlay"
             app:elevation="0dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -26,7 +26,6 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:elevation="0dp"
                 app:popupTheme="@style/AppTheme.PopupOverlay"
                 app:title=' '>
 
@@ -84,7 +83,6 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
@@ -92,7 +90,5 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fabMargin"
         android:tint="#fff"
-        app:srcCompat="@android:drawable/ic_input_add" />
-    
-    
+        app:srcCompat="@android:drawable/ic_menu_add" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

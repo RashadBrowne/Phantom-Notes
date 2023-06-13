@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/backgroundElevation"
+    android:gravity="center|center_horizontal"
+    android:orientation="horizontal"
+    android:weightSum="5"
+    android:padding="5dp">
+
+    <Button
+        android:id="@+id/buttonBack"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_weight="1"
+        android:background="@drawable/button_background"
+        android:drawableLeft="@android:drawable/ic_menu_save"
+        android:drawableTint="@color/colorText"
+        android:minWidth="40dp"
+        android:minHeight="40dp"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"
+        android:text="Back"
+        android:textColor="#000"
+        android:layout_margin="5dp"
+        app:rippleColor="@color/colorDisabled" />
+
+    <Button
+        android:id="@+id/buttonEdit"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_weight="1"
+        android:background="@drawable/button_background"
+        android:drawableLeft="@android:drawable/ic_menu_save"
+        android:drawableTint="@color/colorText"
+        android:minWidth="40dp"
+        android:minHeight="40dp"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"
+        android:text="Edit"
+        android:textColor="#000"
+        android:layout_margin="5dp"
+        app:rippleColor="@color/colorDisabled" />
+
+    <Button
+        android:id="@+id/buttonUndo"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_weight="1"
+        android:background="@drawable/button_background"
+        android:drawableLeft="@android:drawable/ic_menu_save"
+        android:drawableTint="@color/colorText"
+        android:minWidth="40dp"
+        android:minHeight="40dp"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"
+        android:text="Undo"
+        android:textColor="#000"
+        android:layout_margin="5dp"
+        app:rippleColor="@color/colorDisabled" />
+
+    <Button
+        android:id="@+id/buttonSave"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_weight="1"
+        android:background="@drawable/button_background"
+        android:drawableLeft="@android:drawable/ic_menu_save"
+        android:drawableTint="@color/colorText"
+        android:minWidth="40dp"
+        android:minHeight="40dp"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"
+        android:textColor="#000"
+        android:layout_margin="5dp"
+        app:rippleColor="@color/colorDisabled" />
+
+    <Button
+        android:id="@+id/buttonMenu"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_weight="1"
+        android:background="@drawable/button_background"
+        android:drawableLeft="@android:drawable/ic_menu_save"
+        android:drawableTint="@color/colorText"
+        android:minWidth="40dp"
+        android:minHeight="40dp"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"
+        android:text="Menu"
+        android:textColor="#000"
+        android:layout_margin="5dp"
+        app:rippleColor="@color/colorDisabled" />
+</LinearLayout>

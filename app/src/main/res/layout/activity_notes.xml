@@ -5,7 +5,7 @@
     android:id="@+id/mainNoteLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/ElevationColorBottom"
+    android:background="@color/backgroundElevation"
     tools:context=".MainActivity">
 
     <include
@@ -13,15 +13,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/FABSave"
-        android:layout_width="wrap_content"
+    <include
+        layout="@layout/notes_bar_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fabMargin"
-        android:contentDescription="@string/Access_Hint_Save"
-        android:tint="#FFFFFF"
-        android:visibility="invisible"
-        app:srcCompat="@android:drawable/ic_menu_save" />
-
+        android:layout_gravity="bottom" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -6,3 +6,5 @@ DD-MM/YY
 11-6/23 Build 1: Made the final layout and alternate recycler view layout
 
 -Rebranded-
+
+12-6/23 Build 1: Custom Buttons, notes app bar created, light mode set up and notes floating action button removed

@@ -3,9 +3,8 @@
     <color name="colorPrimary">#15161F</color>
     <color name="colorPrimaryDark">#000000</color>
 
-    <color name="ElevationColorTop">#FFFFFF</color>
-    <color name="ElevationColorMiddle">#E5E6EF</color>
-    <color name="ElevationColorBottom">#DFDFDF</color>
+    <color name="foregroundElevation">#F9F9F9</color>
+    <color name="backgroundElevation">#E9E9E9</color>
     <color name="colorAccent">#2BC9C9</color>
     <color name="colorDisabled">#ADD1FF</color>
     <color name="colorText">#000000</color>
