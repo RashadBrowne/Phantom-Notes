@@ -90,5 +90,5 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fabMargin"
         android:tint="#fff"
-        app:srcCompat="@android:drawable/ic_menu_add" />
+        app:srcCompat="@drawable/iconseight_plus_math" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

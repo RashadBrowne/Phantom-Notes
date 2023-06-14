@@ -8,3 +8,4 @@ DD-MM/YY
 -Rebranded-
 
 12-6/23 Build 1: Custom Buttons, notes app bar created, light mode set up and notes floating action button removed
+13-6-23 Build 1: Notes nav bar built out, minor layout fixes, new icon
